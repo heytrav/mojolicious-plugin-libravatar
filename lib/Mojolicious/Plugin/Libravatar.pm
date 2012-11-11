@@ -3,8 +3,21 @@ use Mojo::Base 'Mojolicious::Plugin';
 
 our $VERSION = '0.01';
 
+use Libravatar::URL;
+
 sub register {
-  my ($self, $app) = @_;
+  my ($self, $app, $conf) = @_;
+  $conf //= {};
+  $conf->{size} //= 80;
+  $conf->{rating} //= 'PG';
+
+  $app->helper(
+      libravatar_url => sub {
+           my ($c, $email , %options) @_;
+          return libravatar_url(email => $email, %{$conf},%options);
+      }
+  );
+
 }
 
 1;
