@@ -13,19 +13,19 @@ sub register {
 
   $app->helper(
       libravatar_url => sub {
-           my ($c, $email , %options) @_;
+           my ($c, $email , %options) = @_;
           return libravatar_url(email => $email, %{$conf},%options);
       }
   );
 
 }
 
-1;
+"All work and no beer make Homer something something.";
 __END__
 
 =head1 NAME
 
-Mojolicious::Plugin::Libravatar - Mojolicious Plugin
+Mojolicious::Plugin::Libravatar - Return a 
 
 =head1 SYNOPSIS
 

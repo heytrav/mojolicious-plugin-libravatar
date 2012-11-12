@@ -10,6 +10,8 @@ WriteMakefile(
     PREREQ_PM    => {
         'Mojolicious'     => '3.50',
         'Libravatar::URL' => 0,
+        'Test::Routine'   => 0,
+        'Test::Exception' => 0
     },
     test => { TESTS => 't/*.t' }
 );
