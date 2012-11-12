@@ -18,39 +18,68 @@ has mojo_app => (
         my $test_mojo = Test::Mojo->new();
         my $app       = $test_mojo->app;
         $app->mode('development');
-        return $app;
-    },
-);
-
-test  http_request => { desc => "Request an avatar without https" } => sub {
-    my $self = shift;
-    my $url = $self->tests;
-    is( $url->scheme, 'http', 'Request made over SSL' );
-};
-
-test  https_request => { desc => "Request an avatar without https" } => sub {
-    my $self = shift;
-    my $url = $self->tests( https => 1 );
-    is( $url->scheme, 'https', 'Request made over SSL' );
-
-};
-
-sub tests {
-    my ( $self, %options ) = @_;
-    my $app = $self->mojo_app;
-    lives_ok {
         $app->plugin(
             Libravatar => {
                 size    => 50,
                 default => '~/nobody.jpg',
-                %options,
             }
         );
-    }
-    'Registered plugin.';
+        return $app;
+    },
+);
+
+has cached_mojo_app => (
+    is      => 'ro',
+    isa     => 'Mojolicious::Lite',
+    default => sub {
+        my $test_mojo = Test::Mojo->new();
+        my $app       = $test_mojo->app;
+        $app->mode('development');
+        $app->plugin(
+            Libravatar => {
+                size       => 50,
+                default    => '~/nobody.jpg',
+                mojo_cache => 1,
+            }
+        );
+        return $app;
+    },
+);
+
+test http_request => { desc => "Request an avatar without https" } => sub {
+    my $self = shift;
+    my $app  = $self->mojo_app;
+    my $url  = $self->tests($app);
+    is( $url->scheme, 'http', 'Request made over SSL' );
+};
+
+test https_request => { desc => "Request an avatar without https" } => sub {
+    my $self = shift;
+    my $app  = $self->mojo_app;
+    my $url  = $self->tests( $app, https => 1 );
+    is( $url->scheme, 'https', 'Request made over SSL' );
+
+};
+
+test cached_request => { desc => "Make a cached request" } => sub {
+    my $self = shift;
+    my $app  = $self->cached_mojo_app;
+    my $url  = $self->tests( $app, https => 1 );
+    is( $url->scheme, 'https', 'Request made over SSL' );
+};
+
+test cached_request2 => { desc => "Make second cached request" } => sub {
+    my $self = shift;
+    my $app  = $self->cached_mojo_app;
+    my $url  = $self->tests( $app, https => 1 );
+    is( $url->scheme, 'https', 'Request made over SSL' );
+};
+
+sub tests {
+    my ( $self, $app, %options ) = @_;
     my $url_string;
     lives_ok {
-        $url_string = $app->libravatar_url('user@info.com');
+        $url_string = $app->libravatar_url( 'user@info.com', %options );
         ### url string : $url_string
     }
     'Fetched URL for email';
@@ -58,7 +87,6 @@ sub tests {
     my $url = Mojo::URL->new($url_string);
     return $url;
 }
-
 
 run_me;
 
