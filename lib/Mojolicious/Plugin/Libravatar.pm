@@ -1,7 +1,7 @@
 package Mojolicious::Plugin::Libravatar;
 use Mojo::Base 'Mojolicious::Plugin';
 
-our $VERSION = '0.08';
+our $VERSION = '1.00';
 
 use Libravatar::URL;
 use Mojo::Cache;
