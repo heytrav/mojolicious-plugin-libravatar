@@ -50,7 +50,7 @@ Mojolicious::Plugin::Libravatar - Access the Libravatar API in Mojolicious.
         {
             size       => 30,
             https      => 1,
-            mojo_cache => 1, # optional to enable cacheing
+            mojo_cache => 1, # optional to enable caching
         }
         );
 
