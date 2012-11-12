@@ -1,7 +1,7 @@
 package Mojolicious::Plugin::Libravatar;
 use Mojo::Base 'Mojolicious::Plugin';
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 use Libravatar::URL;
 use Mojo::Cache;
@@ -12,7 +12,6 @@ sub register {
     $conf               //= {};
     $conf->{size}       //= 80;
     $conf->{rating}     //= 'PG';
-    $conf->{mojo_cache} //= 0;
     my $mojo_cache = $conf->{mojo_cache} // 0;
     my $cache;
     $cache = Mojo::Cache->new if $mojo_cache;
