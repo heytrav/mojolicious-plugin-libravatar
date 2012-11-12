@@ -108,5 +108,9 @@ Given an email, returns a url for the corresponding avatar. Options
 L<Mojolicious>, L<Mojolicious::Guides>, L<http://mojolicio.us>,
 L<Libravatar::URL>, L<http://www.libravatar.org>.
 
+=head1 SOURCE
+
+L<git://github.com/heytrav/mpl.git>
+
 
 =cut
