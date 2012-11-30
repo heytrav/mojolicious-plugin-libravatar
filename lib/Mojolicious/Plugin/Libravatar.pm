@@ -1,10 +1,11 @@
 package Mojolicious::Plugin::Libravatar;
 use Mojo::Base 'Mojolicious::Plugin';
 
-our $VERSION = '1.00';
+our $VERSION = '1.04';
 
 use Libravatar::URL;
 use Mojo::Cache;
+#use Smart::Comments;
 
 sub register {
     my ( $self, $app, $conf ) = @_;
@@ -15,11 +16,21 @@ sub register {
     my $mojo_cache = $conf->{mojo_cache};
     delete $conf->{mojo_cache} if defined $mojo_cache;
     my $cache;
+    ### mojo cache : $mojo_cache
     $cache = Mojo::Cache->new if $mojo_cache;
 
     $app->helper(
+        cached_avatar => sub {
+            my ( $c, $email, %options ) = @_;
+            my $url = $cache->get($email);
+            return $url if $url;
+            return $app->libravatar_url('user@info.com',%options);
+        },
+    );
+    $app->helper(
         libravatar_url => sub {
             my ( $c, $email, %options ) = @_;
+            ### cache : $cache
             return libravatar_url( email => $email, %{$conf}, %options )
               if not defined $cache;
 
@@ -29,10 +40,10 @@ sub register {
                 $cache->set( $email => $url );
             }
             return $url;
-        }
+        },
     );
-}
 
+}
 
 "Donuts. Is there anything they can't do?"
 

@@ -14,6 +14,7 @@ has mojo_app => (
     is      => 'ro',
     isa     => 'Mojolicious::Lite',
     clearer => 'reset_app',
+    lazy    => 1,
     default => sub {
         my $test_mojo = Test::Mojo->new();
         my $app       = $test_mojo->app;
@@ -21,7 +22,7 @@ has mojo_app => (
         $app->plugin(
             Libravatar => {
                 size    => 50,
-                default => '~/nobody.jpg',
+                default => 'mm',
             }
         );
         return $app;
@@ -31,6 +32,7 @@ has mojo_app => (
 has cached_mojo_app => (
     is      => 'ro',
     isa     => 'Mojolicious::Lite',
+    lazy    => 1,
     default => sub {
         my $test_mojo = Test::Mojo->new();
         my $app       = $test_mojo->app;
@@ -38,7 +40,7 @@ has cached_mojo_app => (
         $app->plugin(
             Libravatar => {
                 size       => 50,
-                default    => '~/nobody.jpg',
+                default    => 'mm',
                 mojo_cache => 1,
             }
         );
@@ -61,19 +63,30 @@ test https_request => { desc => "Request an avatar without https" } => sub {
 
 };
 
-test cached_request => { desc => "Make a cached request" } => sub {
+test https_cache_request => { desc => "Make a cached request" } => sub {
     my $self = shift;
     my $app  = $self->cached_mojo_app;
     my $url  = $self->tests( $app, https => 1 );
     is( $url->scheme, 'https', 'Request made over SSL' );
 };
 
-test cached_request2 => { desc => "Make second cached request" } => sub {
+test http_cached_request => { desc => "Make second cached request" } => sub {
     my $self = shift;
     my $app  = $self->cached_mojo_app;
     my $url  = $self->tests( $app, https => 1 );
     is( $url->scheme, 'https', 'Request made over SSL' );
 };
+
+test cached_default_avatar =>
+  { desc => 'Only use cached url for default email.' } => sub {
+    my $self      = shift;
+    my $app       = $self->cached_mojo_app;
+    my $first_url = $app->cached_avatar( 'def@abc.com', https => 1 );
+    ### first url : $first_url
+    my $second_url = $app->cached_avatar( 'abc@xyz.com', https => 1 );
+    ### second url : $second_url
+    is( $first_url, $second_url, "Urls match" );
+  };
 
 sub tests {
     my ( $self, $app, %options ) = @_;
