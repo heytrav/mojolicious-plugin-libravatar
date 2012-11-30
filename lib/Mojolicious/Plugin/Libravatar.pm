@@ -101,6 +101,11 @@ However, one additional parameter has been added:
 This is a boolean parameter (0|1) which, when I<true>, tells the plugin to
 store urls in a cache. For now, this is done with L<Mojo::Cache>.
 
+=head2 cached_email
+
+Default email to use for L<cached_avatar> helper.
+
+
 =head1 HELPERS
 
 =head2 libravatar_url
@@ -118,7 +123,7 @@ Given an email, returns a url for the corresponding avatar. Options
 
 If libravatar url for specific email not already cached, return a precached
 default. This might be handy if you don't want to query for avatars at certain
-times. 
+times
 
     % my $url = cached_avatar 'xyz@abc.com', https => 1, size => 80 ..;
 
