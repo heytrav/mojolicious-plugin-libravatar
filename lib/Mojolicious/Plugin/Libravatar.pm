@@ -13,6 +13,7 @@ sub register {
     $conf           //= {};
     $conf->{size}   //= 80;
     $conf->{rating} //= 'PG';
+    $conf->{cached_email} //= 'user@info.com';
     my $mojo_cache = $conf->{mojo_cache};
     delete $conf->{mojo_cache} if defined $mojo_cache;
     my $cache;
@@ -24,7 +25,7 @@ sub register {
             my ( $c, $email, %options ) = @_;
             my $url = $cache->get($email);
             return $url if $url;
-            return $app->libravatar_url('user@info.com',%options);
+            return $app->libravatar_url($conf->{cached_email},%options);
         },
     );
     $app->helper(
@@ -113,6 +114,13 @@ Given an email, returns a url for the corresponding avatar. Options
     # Template
     % my $url = libravatar_url 'user@info.com', size => 80,...;
 
+=head2 cached_avatar
+
+If libravatar url for specific email not already cached, return a precached
+default. This might be handy if you don't want to query for avatars at certain
+times. 
+
+    % my $url = cached_avatar 'xyz@abc.com', https => 1, size => 80 ..;
 
 =head1 SEE ALSO
 
