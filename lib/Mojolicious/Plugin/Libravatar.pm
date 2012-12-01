@@ -56,15 +56,16 @@ Mojolicious::Plugin::Libravatar - Access the Libravatar API in Mojolicious.
 
 =head1 SYNOPSIS
 
-  # Mojolicious
-  $self->plugin(
+    # Mojolicious
+    $self->plugin(
         'Libravatar',
         {
-            size       => 30,
-            https      => 1,
-            mojo_cache => 1, # optional to enable cacheing
+            size         => 30,
+            https        => 1,
+            mojo_cache   => 1,                # optional to enable cacheing
+            cached_email => 'abc@xyz.com',    # optional "pre-cached" avatar
         }
-        );
+    );
 
   # Mojolicious::Lite
   plugin 'Libravatar';
@@ -103,7 +104,7 @@ store urls in a cache. For now, this is done with L<Mojo::Cache>.
 
 =head2 cached_email
 
-Default email to use for L<cached_avatar> helper.
+Default email to use for L<cached_avatar|Mojolicious::Plugin::Libravatar/cached_avatar> helper.
 
 
 =head1 HELPERS
@@ -121,9 +122,11 @@ Given an email, returns a url for the corresponding avatar. Options
 
 =head2 cached_avatar
 
-If libravatar url for specific email not already cached, return a precached
-default. This might be handy if you don't want to query for avatars at certain
-times
+If the libravatar url for specific email has not already been cached, return a
+I<pre-cached> default. This might be handy if you want to avoid making a lot
+of queries to libravatar/gravatar servers on a single page load. The default
+is to use C<user@info.com>, but you can set what you like using the
+L<cached_email|Mojolicious::Plugin::Libravatar/cached_email> parameter above.
 
     % my $url = cached_avatar 'xyz@abc.com', https => 1, size => 80 ..;
 
