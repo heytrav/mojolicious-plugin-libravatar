@@ -122,10 +122,10 @@ Given an email, returns a url for the corresponding avatar. Options
 
 =head2 cached_avatar
 
-If the libravatar url for specific email has not already been cached, return a
+If the libravatar url for a specific email has not already been cached, return a
 I<pre-cached> default. This might be handy if you want to avoid making a lot
 of queries to libravatar/gravatar servers on a single page load. The default
-is to use C<user@info.com>, but you can set what you like using the
+is to use C<user@info.com>, but you can set whatever you like using the
 L<cached_email|Mojolicious::Plugin::Libravatar/cached_email> parameter above.
 
     % my $url = cached_avatar 'xyz@abc.com', https => 1, size => 80 ..;
