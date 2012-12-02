@@ -95,7 +95,7 @@ Register plugin in L<Mojolicious> application.
 
 L<Mojolicious::Plugin::Libravatar> accepts the same options as
 L<Libravatar::URL>, including C<size>, C<https>, C<base>, and C<short_keys>.
-However, one additional parameter has been added:
+In addition, L<Mojolicious::Plugin::Libravatar> accepts the following:
 
 =head2 mojo_cache
 
