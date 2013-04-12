@@ -9,7 +9,7 @@ WriteMakefile(
     AUTHOR       => 'William Travis Holton <heytrav@cpan.org>',
     PREREQ_PM    => {
         'Mojolicious'     => '3.50',
-        'Libravatar::URL' => 0,
+        'Libravatar::URL' => '1.06',
         'Test::Routine'   => 0,
         'Test::Exception' => 0
     },
