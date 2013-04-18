@@ -92,7 +92,7 @@ sub tests {
     my ( $self, $app, %options ) = @_;
     my $url_string;
     lives_ok {
-        $url_string = $app->libravatar_url( 'user@info.com', %options );
+        $url_string = $app->libravatar_url( 'user@yahoo.com', %options );
         ### url string : $url_string
     }
     'Fetched URL for email';

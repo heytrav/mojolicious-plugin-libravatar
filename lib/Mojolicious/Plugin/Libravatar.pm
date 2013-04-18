@@ -5,14 +5,15 @@ our $VERSION = '1.07';
 
 use Libravatar::URL;
 use Mojo::Cache;
+
 #use Smart::Comments;
 
 sub register {
     my ( $self, $app, $conf ) = @_;
 
-    $conf           //= {};
-    $conf->{size}   //= 80;
-    $conf->{rating} //= 'PG';
+    $conf                 //= {};
+    $conf->{size}         //= 80;
+    $conf->{rating}       //= 'PG';
     $conf->{cached_email} //= 'user@info.com';
     my $mojo_cache = $conf->{mojo_cache};
     delete $conf->{mojo_cache} if defined $mojo_cache;
@@ -25,7 +26,7 @@ sub register {
             my ( $c, $email, %options ) = @_;
             my $url = $cache->get($email);
             return $url if $url;
-            return $app->libravatar_url($conf->{cached_email},%options);
+            return $app->libravatar_url( $conf->{cached_email}, %options );
         },
     );
     $app->helper(
@@ -37,7 +38,11 @@ sub register {
 
             my $url = $cache->get($email);
             if ( not $url ) {
-                $url = libravatar_url( email => $email, %{$conf}, %options );
+                $url = libravatar_url(
+                    email => $email,
+                    base  => 'https://seccdn.libravatar.org/avatar',
+                    %{$conf}, %options
+                );
                 $cache->set( $email => $url );
             }
             return $url;
