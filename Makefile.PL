@@ -8,8 +8,8 @@ WriteMakefile(
     VERSION_FROM => 'lib/Mojolicious/Plugin/Libravatar.pm',
     AUTHOR       => 'William Travis Holton <heytrav@cpan.org>',
     PREREQ_PM    => {
-        'Mojolicious'     => '3.50',
-        'Libravatar::URL' => '1.06',
+        'Mojolicious'     => 0,
+        'Libravatar::URL' => 0,
         'Test::Routine'   => 0,
         'Test::Exception' => 0
     },
